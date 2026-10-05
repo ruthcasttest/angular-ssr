@@ -1,0 +1,11 @@
+<div class="grid grid-cols-1 gap-3 sm:grids-cols-3 md:grid-cols-5">
+   @for (pokemon of pokemons(); track pokemon.id) {
+      <pokemon-card [pokemon]="pokemon"/>
+   }
+   @if(false) {
+      <div class="col-span-5 text-center border-white h-28 flex justify-center">
+        No hay pokemons
+      </div>
+   }
+
+</div>
