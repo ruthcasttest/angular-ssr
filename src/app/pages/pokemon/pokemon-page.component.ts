@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Pokemon } from '../../pokemons/interfaces/pokemon.interface';
 import { PokemonsService } from '../../pokemons/services/pokemons.services';
 import { ActivatedRoute } from '@angular/router';
-import { pipe, tap } from 'rxjs'
+import { pipe, tap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -11,7 +11,6 @@ import { Meta, Title } from '@angular/platform-browser';
   templateUrl: './pokemon-page.component.html',
 })
 export default class PokemonPageComponent implements OnInit {
-
   private pokemonService = inject(PokemonsService);
   private route = inject(ActivatedRoute);
   private title = inject(Title);
@@ -23,23 +22,23 @@ export default class PokemonPageComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     if (!id) return;
 
-    this.pokemonService.loadPokemon(id)
+    this.pokemonService
+      .loadPokemon(id)
       .pipe(
-        tap( ({name, id}) => {
+        tap(({ name, id }) => {
+          const pageTitle = `#${id} - ${name}`;
+          const pageDescription = `Pagina del pokemon ${name}`;
 
-          const pageTitle = `#${ id } - ${ name }`
-          const pageDescription = `Pagina del pokemon ${name}`
-
-          this.title.setTitle( pageTitle );
-          this.meta.updateTag( { name: 'description', content: pageDescription})
-          this.meta.updateTag( { name: 'og:title', content: pageTitle })
-          this.meta.updateTag( { name: 'description', content: pageDescription})
-          this.meta.updateTag( {
+          this.title.setTitle(pageTitle);
+          this.meta.updateTag({ name: 'description', content: pageDescription });
+          this.meta.updateTag({ name: 'og:title', content: pageTitle });
+          this.meta.updateTag({ name: 'description', content: pageDescription });
+          this.meta.updateTag({
             name: 'og:image',
-            content:`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${id}.png`,
+            content: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${id}.png`,
           });
-
-        })
+        }),
       )
+      .subscribe(this.pokemon.set);
   }
 }
